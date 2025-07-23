@@ -4,7 +4,7 @@ locals {
 }
 
 provider "aws" {
-  region     = var.region != "default" ? var.region : var.default_region
+  region     = local.region != "default" ? local.region : var.default_region
   access_key = var.access_key
   secret_key = var.secret_key
   token      = var.token
@@ -17,7 +17,7 @@ module "infra" {
   use_certificate_manager = var.use_certificate_manager
   private_key_path        = var.private_key_path
   certificate_path        = var.certificate_path
-  region                  = var.region
+  region                  = local.region
   manage_dns_zone         = var.manage_dns_zone
   depends_on              = [module.domain]
 }
@@ -39,6 +39,6 @@ module "domain" {
   source                  = "./modules/domain"
   infra_config_yaml_file  = var.infra_config_yaml_file
   use_certificate_manager = var.use_certificate_manager
-  region                  = var.region
+  region                  = local.region
   depends_on              = [module.dns]
 }
