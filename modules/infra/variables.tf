@@ -12,7 +12,7 @@ variable "use_certificate_manager" {
 variable "manage_dns_zone" {
   description = "Manage DNS zone."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "private_key_path" {
