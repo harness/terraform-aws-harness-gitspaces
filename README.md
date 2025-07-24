@@ -4,14 +4,18 @@ This Terraform module provisions the core AWS infrastructure required for Harnes
 
 ## Inputs
 
-| Name                   | Description                                            | Type   | Default | Required |
-|:----------------------:|--------------------------------------------------------|:-------|:--------|:--------:|
-| infra_config_yaml_file | Path to the YAML file containing infrastructure config | string | n/a     | yes      |
-| use_certificate_manager| Use AWS Certificate Manager for TLS certificates       | bool   | true    | no       |
-| manage_dns_zone        | Manage DNS zone for the environment                    | bool   | true   | no       |
-| private_key_path       | Path to private key file for SSL (if not using ACM)    | string | ""      | no       |
-| certificate_path       | Path to SSL certificate file (if not using ACM)        | string | ""      | no       |
-| chain_path             | Path to SSL certificate chain file (if not using ACM)  | string | ""      | no       |
+|          Name           | Description                                            | Type   | Default | Required |
+|:-----------------------:|--------------------------------------------------------|:-------|:--------|:--------:|
+| infra_config_yaml_file  | Path to the YAML file containing infrastructure config | string | n/a     | yes      |
+|     default_region      | The AWS region used while managing for global resources | string | n/a     | yes      |
+|       access_key        | The AWS access key id                                  | string | n/a     | yes      |
+|       secret_key        | The AWS access key secret                              | string | n/a     | yes      |
+|          token          | The AWS access session token                           | string   | ""    | no       |
+| use_certificate_manager | Use AWS Certificate Manager for TLS certificates       | bool   | true    | no       |
+|     manage_dns_zone     | Manage DNS zone for the environment                    | bool   | true   | no       |
+|    private_key_path     | Path to private key file for SSL (if not using ACM)    | string | ""      | no       |
+|    certificate_path     | Path to SSL certificate file (if not using ACM)        | string | ""      | no       |
+|       chain_path        | Path to SSL certificate chain file (if not using ACM)  | string | ""      | no       |
 
 
 ## How to Apply Terraform
