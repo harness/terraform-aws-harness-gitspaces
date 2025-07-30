@@ -7,7 +7,7 @@ resource "aws_lb_target_group" "nlb_default" {
     for k, v in local.region_configs : k => v
     if v.region_name == var.region
   }
-  name        = "${local.name}-${each.value.region_name}-nlb"
+  name        = "${local.name}-nlb"
   port        = 2200
   protocol    = "TCP"
   vpc_id      = local.vpc_id
@@ -24,7 +24,7 @@ resource "aws_lb_target_group" "gateway_ssh" {
     for k, v in local.region_configs : k => v
     if v.region_name == var.region
   }
-  name        = "${local.name}-${each.value.region_name}-gw-ssh"
+  name        = "${local.name}-gw-ssh"
   port        = 22
   protocol    = "TCP"
   vpc_id      = local.vpc_id
@@ -41,7 +41,7 @@ resource "aws_lb_target_group" "gateway_nlb_default" {
     for k, v in local.region_configs : k => v
     if v.region_name == var.region
   }
-  name        = "${local.name}-${each.value.region_name}-gw-nlb"
+  name        = "${local.name}-gw-nlb"
   port        = 2118
   protocol    = "TCP"
   vpc_id      = local.vpc_id
@@ -58,7 +58,7 @@ resource "aws_lb_target_group" "gateway_nlb_default_mtls" {
     for k, v in local.region_configs : k => v
     if v.region_name == var.region
   }
-  name        = "${local.name}-${each.value.region_name}-gw-nlb-mtls"
+  name        = "${local.name}-gw-nlb-mtls"
   port        = 2117
   protocol    = "TCP"
   vpc_id      = local.vpc_id
@@ -75,7 +75,7 @@ resource "aws_lb_target_group" "alb_default" {
     for k, v in local.region_configs : k => v
     if v.region_name == var.region
   }
-  name        = "${local.name}-${each.value.region_name}-alb"
+  name        = "${local.name}-alb"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = local.vpc_id
@@ -93,7 +93,7 @@ resource "aws_lb_target_group" "alb_ingress" {
     for k, v in local.region_configs : k => v
     if v.region_name == var.region
   }
-  name        = "${local.name}-${each.value.region_name}-alb-ingress"
+  name        = "${local.name}-alb-ingress"
   port        = 443
   protocol    = "TCP"
   vpc_id      = local.vpc_id
@@ -115,7 +115,7 @@ resource "aws_lb" "nlb" {
     for k, v in local.region_configs : k => v
     if v.region_name == var.region
   }
-  name               = "${local.name}-${each.value.region_name}-nlb"
+  name               = "${local.name}-nlb"
   internal           = false
   load_balancer_type = "network"
   subnets = [
@@ -131,7 +131,7 @@ resource "aws_lb" "alb" {
     for k, v in local.region_configs : k => v
     if v.region_name == var.region
   }
-  name               = "${local.name}-${each.value.region_name}-alb"
+  name               = "${local.name}-alb"
   internal           = false
   load_balancer_type = "application"
   subnets = [
@@ -204,9 +204,8 @@ resource "aws_lb_listener" "alb_listener" {
     if v.region_name == var.region
   }
   load_balancer_arn = aws_lb.nlb[each.key].arn
-  #   load_balancer_arn = aws_lb.gateway_nlb[each.key].arn
-  port     = 443
-  protocol = "TCP"
+  port              = 443
+  protocol          = "TCP"
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.alb_ingress[each.key].arn

@@ -8,7 +8,7 @@ resource "aws_acm_certificate" "default" {
   validation_method = "DNS"
 
   tags = {
-    Name = "${local.name}-${each.value.region_name}-wildcard-cert"
+    Name = "${local.name}-wildcard-cert"
   }
 
   lifecycle {
