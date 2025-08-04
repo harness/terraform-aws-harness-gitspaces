@@ -145,6 +145,15 @@ resource "aws_vpc_security_group_ingress_rule" "gateway_sg_ingress_rule_2200" {
   referenced_security_group_id = aws_security_group.lb_sg.id
 }
 
+resource "aws_vpc_security_group_ingress_rule" "gateway_sg_ingress_rule_6379" {
+  security_group_id            = aws_security_group.gateway_sg.id
+  description                  = "Allow traffic between redis and gateway instances"
+  from_port                    = 6379
+  to_port                      = 6379
+  ip_protocol                  = "tcp"
+  referenced_security_group_id = aws_security_group.gateway_sg.id
+}
+
 resource "aws_vpc_security_group_ingress_rule" "gitspace_sg_ingress_rule_2200_65000" {
   security_group_id            = aws_security_group.gitspace_sg.id
   description                  = "Allow traffic from gateway to gitspace vm"

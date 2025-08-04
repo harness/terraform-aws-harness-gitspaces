@@ -3,13 +3,13 @@ locals {
 }
 
 resource "aws_launch_template" "default_template" {
-  for_each = local.gateway_deploy ? {
+  for_each = {
     for k, v in local.region_configs : k => v
     if v.region_name == var.region
-  } : {}
+  }
 
 
-  name          = "${local.name}-${local.region_configs[each.key].region_name}-gateway-template-${local.gateway_suffix}"
+  name          = "${local.name}-gateway-template-${local.gateway_suffix}"
   image_id      = local.region_configs[each.key].gateway_ami_id
   instance_type = local.gateway_machine_type
 
@@ -39,7 +39,14 @@ resource "aws_launch_template" "default_template" {
     account_identifier = local.account_identifier
     infra_provider     = local.infra_provider_config_identifier
     gateway_url        = local.region_configs[each.key].domain
-    group_name         = "${local.name}-${local.region_configs[each.key].region_name}-gateway-group-${local.gateway_suffix}"
+    group_name         = "${local.name}-gateway-group-${local.gateway_suffix}"
+    redis_endpoint = (
+      length(coalesce(aws_elasticache_replication_group.redis, [])) > 0
+      ? "${aws_elasticache_replication_group.redis[0].primary_endpoint_address}:6379"
+      : "localhost:6379"
+    )
+    events_mode = local.events_mode
+    enable_ha   = local.enable_high_availability
   }))
 
   metadata_options {
@@ -54,11 +61,11 @@ resource "aws_launch_template" "default_template" {
 }
 
 resource "aws_autoscaling_group" "gateway" {
-  for_each = local.gateway_deploy ? {
+  for_each = {
     for k, v in local.region_configs : k => v
     if v.region_name == var.region
-  } : {}
-  name = "${local.name}-${local.region_configs[each.key].region_name}-gateway-group-${local.gateway_suffix}"
+  }
+  name = "${local.name}-gateway-group-${local.gateway_suffix}"
   launch_template {
     id      = aws_launch_template.default_template[each.key].id
     version = "$Latest"

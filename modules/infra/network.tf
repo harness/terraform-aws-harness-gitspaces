@@ -134,7 +134,7 @@ resource "aws_eip" "nat_static_ip" {
 
   domain = "vpc"
   tags = {
-    Name = "${local.name}-${each.value.region_name}-${each.value.az}-nat-ip"
+    Name = "${local.name}-${each.value.az}-nat-ip"
   }
 }
 
@@ -144,7 +144,7 @@ resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat_static_ip[each.key].id
   subnet_id     = aws_subnet.public_subnet[each.key].id
   tags = {
-    Name = "${local.name}-${each.value.region_name}-${each.value.az}-nat"
+    Name = "${local.name}-${each.value.az}-nat"
   }
 
   depends_on = [aws_internet_gateway.igw]

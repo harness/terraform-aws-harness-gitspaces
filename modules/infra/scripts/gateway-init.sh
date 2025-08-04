@@ -27,6 +27,9 @@ CDE_GATEWAY_VERSION=${gateway_version}
 CDE_GATEWAY_REGION=${region_name}
 CDE_GATEWAY_GROUP_NAME=${group_name}
 CDE_GATEWAY_INFRA_PROVIDER_TYPE=hybrid_vm_aws
+CDE_GATEWAY_REDIS_ENDPOINT=${redis_endpoint}
+CDE_GATEWAY_EVENTS_MODE=${events_mode}
+CDE_GATEWAY_ENABLE_HIGH_AVAILABILITY=${enable_ha}
 EOF
 
 cat << YAML > /etc/gateway/config/cdeclients.yaml
