@@ -2,6 +2,49 @@
 
 This Terraform module provisions the core AWS infrastructure required for Harness Gitspaces, including VPC, subnets, security groups, load balancers, gateways, and DNS records.
 
+## Prerequisites
+
+### AWS Permissions
+
+The following permissions must be granted to the user/role whose credentials are provided as input variables in `main.tf`:
+
+#### Custom IAM Permission Set
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:AddRoleToInstanceProfile",
+        "iam:AttachRolePolicy",
+        "iam:CreateInstanceProfile",
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:PassRole",
+        "iam:List*",
+        "iam:Get*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+#### AWS Managed Policies
+
+1. `AmazonEC2FullAccess`
+2. `AmazonElastiCacheFullAccess`
+3. `AmazonRoute53FullAccess`
+4. `AWSCertificateManagerFullAccess`
+5. `ElasticLoadBalancingFullAccess`
+
+### Tools and binaries
+The following tools should be present in path.
+1. `yq`
+2. `jq`
+
 ## Inputs
 
 |          Name           | Description                                            | Type   | Default | Required |
@@ -57,6 +100,7 @@ This module provisions and manages:
 - **Route Tables & Associations**: For public/private subnet routing.
 - **DNS Records**: Route53 records for load balancer endpoints (if `manage_dns_zone` is true).
 - **SSL/TLS Certificates**: Via ACM or custom files, as configured.
+- **Redis**: For high availability of cde-gateway. Only required if number of instances is > 1.
 
 
 ## Example Usage
